@@ -1,0 +1,22 @@
+# Local accounts, sessions and secrets
+*.sqlite3
+*.sqlite3-*
+.django-secret-key
+.env
+.env.*
+!.env.example
+
+# Python and editor files
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.DS_Store
+.vscode/
+.idea/
+
+# Local execution records and generated assets
+project_records/
+staticfiles/
+media/
+*.log

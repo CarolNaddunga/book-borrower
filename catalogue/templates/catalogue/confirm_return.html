@@ -1,0 +1,7 @@
+{% extends "catalogue/base.html" %}
+{% block title %}Confirm return · Library{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="eyebrow">Loans &amp; returns</div><h1>Confirm book return</h1><p class="intro">Check the copy number against the book that has been returned.</p></div></div>
+<section class="panel form-panel"><h2>{{ loan.book.title }}</h2><dl class="details return-details"><div><dt>Copy number</dt><dd>{{ loan.book.copy_number }}</dd></div><div><dt>Borrower</dt><dd>{{ loan.borrower.username }}</dd></div><div><dt>Due date</dt><dd>{{ loan.due_date|date:"j M Y" }}</dd></div><div><dt>Status</dt><dd>{{ loan.status }}</dd></div></dl>
+{% if loan.returned_at %}<p>This return was already recorded on {{ loan.returned_at|date:"j M Y, H:i" }}.</p><a href="{% url 'loans' %}">Back to loans</a>{% else %}<p>Confirm only after you have received this book. The return will be recorded under your account and the copy will become available again.</p><form method="post" action="{% url 'return_loan' loan.pk %}">{% csrf_token %}<div class="form-actions"><button>Confirm return</button><a href="{% url 'loans' %}">Cancel</a></div></form>{% endif %}</section>
+{% endblock %}

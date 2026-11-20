@@ -1,0 +1,8 @@
+{% extends "catalogue/base.html" %}
+{% block title %}Create an account · Book Borrower{% endblock %}
+{% block content %}
+<div class="login-layout signup-layout">
+<section class="login-copy"><span class="eyebrow">YOUR LIBRARY ACCOUNT</span><h1>A new account.<br><em>A new chapter.</em></h1><p>Create a borrower account to browse the collection and view your own loans and due dates.</p><div class="login-features"><span>Browse available books</span><span>See your borrowing history</span><span>Keep track of returns</span></div><div class="login-help"><strong>How borrowing works</strong><p>After signing up, visit the librarian to borrow a book. The librarian records loans and returns; you can check them in your account.</p></div></section>
+<section class="login-card"><span class="eyebrow">JOIN BOOK BORROWER</span><h2>Create an account</h2><p class="intro">Choose a unique username and a strong password. Your name is optional.</p><form method="post">{% csrf_token %}{{ form.as_p }}<button>Create account <span>→</span></button></form><div class="login-help"><strong>Already have an account?</strong><p><a class="signup-link" href="{% url 'login' %}">Sign in →</a></p></div></section>
+</div>
+{% endblock %}
