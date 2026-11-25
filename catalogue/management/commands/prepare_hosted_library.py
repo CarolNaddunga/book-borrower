@@ -14,7 +14,7 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **options):
         for number, (title, author) in enumerate(DEMO_TITLES, 1):
-            BookCopy.objects.get_or_create(copy_number=f'DEMO-{number:03}', defaults={'title': title, 'author': author})
+            BookCopy.objects.get_or_create(copy_number=f'LIB-{number:03}', defaults={'title': title, 'author': author})
         for code, title, author in SAMPLE_BOOKS:
             BookCopy.objects.get_or_create(copy_number=code, defaults={'title': title, 'author': author})
         username = os.environ.get('LIBRARIAN_USERNAME', 'librarian')

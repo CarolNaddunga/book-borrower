@@ -5,12 +5,12 @@ from catalogue.models import BookCopy
 # Published books; copy numbers below are local sample identifiers, not ISBNs
 # or a claim that the school library owns these copies.
 SAMPLE_BOOKS = [
-    ("SAMPLE-001", "Python Crash Course", "Eric Matthes"),
-    ("SAMPLE-002", "The Web Application Hacker's Handbook: Finding and Exploiting Security Flaws",
+    ("LIB-011", "Python Crash Course", "Eric Matthes"),
+    ("LIB-012", "The Web Application Hacker's Handbook: Finding and Exploiting Security Flaws",
      "Dafydd Stuttard and Marcus Pinto"),
-    ("SAMPLE-003", "Computer Networks", "Andrew S. Tanenbaum and David J. Wetherall"),
-    ("SAMPLE-004", "Things Fall Apart", "Chinua Achebe"),
-    ("SAMPLE-005", "Pride and Prejudice", "Jane Austen"),
+    ("LIB-013", "Computer Networks", "Andrew S. Tanenbaum and David J. Wetherall"),
+    ("LIB-014", "Things Fall Apart", "Chinua Achebe"),
+    ("LIB-015", "Pride and Prejudice", "Jane Austen"),
 ]
 
 

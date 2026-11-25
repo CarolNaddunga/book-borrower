@@ -167,7 +167,7 @@ class SampleBookTests(TestCase):
     def test_sample_import_is_repeatable_and_preserves_existing_records(self):
         from django.core.management import call_command
         from io import StringIO
-        existing = BookCopy.objects.create(copy_number='SAMPLE-001', title='My existing title', author='Existing author')
+        existing = BookCopy.objects.create(copy_number='LIB-011', title='My existing title', author='Existing author')
         call_command('add_sample_books', stdout=StringIO())
         call_command('add_sample_books', stdout=StringIO())
         self.assertEqual(BookCopy.objects.count(), 5)
@@ -338,3 +338,25 @@ class HostedSetupTests(TestCase):
                 call_command('prepare_hosted_library', stdout=StringIO())
         account.refresh_from_db()
         self.assertFalse(account.is_staff)
+
+class LibraryCopyNumberTests(BorrowingFixture):
+    def test_renaming_keeps_loans_and_avoids_existing_codes(self):
+        import importlib
+        from django.apps import apps
+        self.book.copy_number = 'DEMO-003'
+        self.book.save()
+        existing = BookCopy.objects.create(title='Existing library copy', author='Author', copy_number='LIB-003')
+        sample = BookCopy.objects.create(title='Another copy', author='Author', copy_number='SAMPLE-004')
+        migrate = importlib.import_module('catalogue.migrations.0003_library_copy_numbers').rename_book_codes
+        migrate(apps, None)
+        self.book.refresh_from_db()
+        self.loan.refresh_from_db()
+        sample.refresh_from_db()
+        existing.refresh_from_db()
+        self.assertEqual(self.loan.book_id, self.book.pk)
+        self.assertTrue(self.book.copy_number.startswith('LIB-'))
+        self.assertNotEqual(self.book.copy_number, existing.copy_number)
+        self.assertEqual(existing.copy_number, 'LIB-003')
+        self.assertEqual(sample.copy_number, 'LIB-014')
+        migrate(apps, None)
+        self.assertEqual(BookCopy.objects.count(), 3)

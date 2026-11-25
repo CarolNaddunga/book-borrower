@@ -33,6 +33,6 @@ class Command(BaseCommand):
         for name in names[1:]:
             User.objects.create_user(name, password=password)
         for number, (title, author) in enumerate(DEMO_TITLES, start=1):
-            BookCopy.objects.get_or_create(copy_number=f"DEMO-{number:03}", defaults={
+            BookCopy.objects.get_or_create(copy_number=f"LIB-{number:03}", defaults={
                 "title": title, "author": author})
         self.stdout.write(self.style.SUCCESS("Created librarian, borrower1, borrower2 and ten sample copies of published books. No real borrower records were used."))
