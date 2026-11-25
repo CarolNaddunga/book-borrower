@@ -309,3 +309,32 @@ class PublicSignupTests(TestCase):
         user = get_user_model().objects.create_user(username='already_signed_in')
         self.client.force_login(user)
         self.assertRedirects(self.client.get(reverse('signup')), reverse('my_loans'))
+
+class HostedSetupTests(TestCase):
+    def test_hosted_setup_is_repeatable_and_preserves_librarian_password(self):
+        from django.core.management import call_command
+        from unittest.mock import patch
+        from io import StringIO
+        with patch.dict('os.environ', {'LIBRARIAN_USERNAME': 'hosted_librarian', 'LIBRARIAN_PASSWORD': 'Host-test-947!'}):
+            call_command('prepare_hosted_library', stdout=StringIO())
+            account = get_user_model().objects.get(username='hosted_librarian')
+            self.assertTrue(account.is_staff)
+            self.assertFalse(account.is_superuser)
+            self.assertTrue(account.has_perm('catalogue.manage_borrowers'))
+            self.assertEqual(BookCopy.objects.count(), 15)
+            original = account.password
+            call_command('prepare_hosted_library', stdout=StringIO())
+            account.refresh_from_db()
+            self.assertEqual(account.password, original)
+            self.assertEqual(BookCopy.objects.count(), 15)
+
+    def test_hosted_setup_does_not_promote_an_existing_borrower(self):
+        from django.core.management import call_command, CommandError
+        from unittest.mock import patch
+        from io import StringIO
+        account = get_user_model().objects.create_user(username='occupied_name')
+        with patch.dict('os.environ', {'LIBRARIAN_USERNAME': 'occupied_name', 'LIBRARIAN_PASSWORD': 'Host-test-947!'}):
+            with self.assertRaises(CommandError):
+                call_command('prepare_hosted_library', stdout=StringIO())
+        account.refresh_from_db()
+        self.assertFalse(account.is_staff)

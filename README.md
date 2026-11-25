@@ -90,3 +90,25 @@ Uses Django's generated project structure, authentication and admin:
 
 Initial code and documentation were prepared with AI assistance. Review and
 understand the implementation, and record assistance according to course requirements.
+
+## Reviewer hosting on Render
+
+The repository includes `render.yaml` for a free Python web service and a free
+PostgreSQL database. Connect this private repository through Render's Blueprints
+screen and review the proposed resources before deploying. The free database has
+an expiry; export review evidence before expiry and check Render's current limits.
+
+The build installs requirements and collects static files. Startup applies
+migrations, adds 15 sample book titles, creates the librarian once, then starts
+Gunicorn. It does not upload the local database or reuse local account passwords.
+
+Render generates private `DJANGO_SECRET_KEY` and `LIBRARIAN_PASSWORD` environment
+values. View the librarian password privately in Render's Environment screen; the
+username is `librarian`. Never put this password in the reviewer invitation.
+Existing librarian passwords are not reset by redeployments. Reviewers use
+`/accounts/signup/` and `/accounts/login/` and can only create borrower accounts.
+
+Hosting uses `config.review_settings`, disables debug output, validates the Render
+hostname and enables secure cookies. PostgreSQL keeps accounts and loans across
+web service restarts within the database's lifetime. Live deployment verification
+is still required after connecting Render.
